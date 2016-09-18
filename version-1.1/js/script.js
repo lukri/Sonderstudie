@@ -1,3 +1,5 @@
+/*global d3, SelectionTree*/
+
 var dataObj = {readyState:false};
 dataObj.dataSet = []; //destinationArray
 
@@ -49,7 +51,9 @@ dataObj.labels = [];
 dataObj.init = function(){
   d3.selectAll("input").on("change", change);
   layerManager.drawLegend();
+  
   disableSelection(document);
+  
   document.getElementById("legend").style.cursor = "pointer";
   d3.select("#legend").selectAll("input").on("change", dataObj.drawGraph);
   d3.select("#legend").selectAll("div").on("dblclick", function(){dragstart(this);});
@@ -325,14 +329,16 @@ document.onmouseup = function dragStop(){
     dragObjekt = null;
     layerManager.reorderLayer();
   }
-}
+};
 
 function disableSelection(target){
-  if (typeof target.onselectstart!="undefined") //IE route
-    target.onselectstart=function(){return false;}
-  else if (typeof target.style.MozUserSelect!="undefined") //Firefox route
+  target = document.getElementsByTagName('body')[0];
+  if(typeof target.onselectstart!="undefined"){ //IE route
+    target.onselectstart=function(){return false;};
+  }else if(typeof target.style.MozUserSelect!="undefined"){ //Firefox route
     target.style.MozUserSelect="none";
-  else //All other route (ie: Opera)
-    target.onmousedown=function(){return false;}
+  }else{ //All other route (ie: Opera)
+    target.onmousedown=function(){return false;};
+  }
 }
 
