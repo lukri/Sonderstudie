@@ -1,4 +1,4 @@
-/*global d3, SelectionTree, Layer, LayerManager, getDate*/
+/*global d3, SelectionTree*/
 
 var dataObj = {readyState:false};
 dataObj.dataSet = []; //destinationArray
@@ -40,15 +40,9 @@ layerManager.addLayer(regularITLayer);
 layerManager.addLayer(freeNoITLayer);
 layerManager.addLayer(regularNoITLayer);
 
-function percentage(total, portion, options){
-  options = options || {};
+function percentage(total, portion){
   if(total===0)return 0;
-  var p = portion/total*100;
-  if(options.nachkomma){
-    var n = options.nachkomma;
-    p = Math.floor(p * Math.pow(10, n))/Math.pow(10, n);
-  } 
-  return p;
+  return portion/total*100;
 }
 //---------------------------------------------------------------------------------------------------
 
@@ -76,6 +70,30 @@ dataObj.init = function(){
   d3.select("#selection").selectAll(".updater").on("click", function(){this.parent.update()});
   
   
+  d3.select("#h2c").on("click", function(){
+    var chart = $("#chartbox");
+    var collection = document.getElementById("collection");
+    html2canvas(chart, {
+            onrendered: function(canvas) {
+                theCanvas = canvas;
+                collection.appendChild(canvas);
+            }
+    });
+    /*
+    html2canvas(document.body, {
+        onrendered: function(canvas) {
+          document.body.appendChild(canvas);
+        }
+        });
+    */    
+  });
+  
+  /*
+  for(var i in dataObj.dataSet){
+    labels[i] = dataObj.dataSet[i].label;
+  }
+  */
+
   var regIT;
 
   for(var i in dataObj.dataSet){
@@ -91,12 +109,12 @@ dataObj.init = function(){
       regularNoITLayer.addValue(dataObj.dataSet[i].total-dataObj.dataSet[i].totalFree-regIT);
   }
 
+
+
   dataObj.drawGraph();
 };
 
 //---------------------------------------------------------------------------------------------------
-
-var yGroupMax, yStackMax;
 
 dataObj.drawGraph = function() {
   selectionTree.setGreen();
@@ -110,10 +128,9 @@ dataObj.drawGraph = function() {
     .attr("transform", "translate(" + dataObj.margin.left + "," + dataObj.margin.top + ")");
 
 
-  //if(dataObj.representation == "perBar") {
-  //needed for table representation too, therefore get everytime
-  barTotal = layerManager.getBarTotal();
-  //}
+  if(dataObj.representation == "perBar") {
+    barTotal = layerManager.getBarTotal();
+  }
 
   dataObj.n = layerManager.getAmountOfActiveLayer(); // number of layers
   dataObj.m = selectionTree.getTree().children.Gesamt.activeChildren;// number of samples per layer (how many bars)
@@ -124,13 +141,12 @@ dataObj.drawGraph = function() {
   
   var layerCounter = 0;
   
-  var layers = dataObj.stack(d3.range(dataObj.n).map(function () {
+  layers = dataObj.stack(d3.range(dataObj.n).map(function () {
     var a = layerManager.getActiveLayer(layerCounter).getValues();
     layerCounter++;
-    //TODO richtiger wert im index adden
-    return a.map(function(d, i) { return {x: i, y: Math.max(0, d.value), index:d.index, layerNumber:layerCounter}; });
-  }));
 
+    return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
+  }));
   yGroupMax = d3.max(layers, function (layer) {
     return d3.max(layer, function (d) {
       return d.y;
@@ -158,16 +174,13 @@ dataObj.drawGraph = function() {
     .style("fill", function (d, i) {
       return layerManager.getActiveLayer(i).getColor();
     });
-  
+
   dataObj.rect = dataObj.layer.selectAll("rect")
     .data(function (d) {
       return d;
     })
     .enter().append("rect")
     .attr("x", function (d) {
-      this.chartIndex = d.x;
-      this.dataIndex = d.index; //adds index directly to the rect
-      this.layerNumber = d.layerNumber;
       return dataObj.x(d.x);
     })
     .attr("y", dataObj.height)
@@ -236,12 +249,6 @@ dataObj.drawGraph = function() {
     .attr("transform", "rotate(-90)")
     .style("text-anchor", "end");
 
-
-
-  //add onmouse directly to the rect
-  dataObj.rect.on("mouseover", function(){showInfomation(this);});
-  dataObj.rect.on("mouseout", function(){showInfomation();});
-
   document.getElementById("stackbutton").checked = true;
 
 };
@@ -268,8 +275,6 @@ function change() {
   } else {
   }
 }
-
-
 
 function transitionGrouped() {
   dataObj.y.domain([0, yGroupMax]);
@@ -337,86 +342,3 @@ function disableSelection(target){
   }
 }
 
-
-var infobox = document.getElementById('infobox');
-infobox.style.display = "none";
-
-var tableTemplate = document.createElement("table");
-var firstRow = document.createElement("tr");
-firstRow.innerHTML = '<td class="zerotop zeroleft"></td>\
-<td class="zerotop">Absolut</td>\
-<td class="zerotop">% auf Total</td>\
-<td class="zerotop">% auf Selektion</td>';
-tableTemplate.appendChild(firstRow);
-
-
-
-var lastSelectedRect = null;
-function showInfomation(rect){
-      if(lastSelectedRect){
-        lastSelectedRect.style.fill = "";
-      }
-      
-      if(rect){
-        //highlight selection
-        rect.style.fill = "blue";
-        
-        infobox.style.display = "block";
-        var di = rect.dataIndex;
-        var label = dataObj.dataSet[di].label;
-        infobox.innerHTML = "Information f&uuml;r <b>" + label + "</b><ul>";
-        var table = tableTemplate.cloneNode(true);
-        infobox.appendChild(table);
-        
-        var total = dataObj.dataSet[di].total; 
-        
-        
-        var row = document.createElement("tr");
-        row.innerHTML = '<td class="zeroleft">Total</td>';
-        row.innerHTML += '<td>'+total+'</td>';
-        row.innerHTML += "<td>100 %</td>";
-        row.innerHTML += "<td>---</td>";
-        table.appendChild(row);
-        row = document.createElement("tr");
-        
-        var barTotalValue = barTotal[rect.chartIndex];
-        row.innerHTML = '<td class="zeroleft">Selektoin</td>';
-        row.innerHTML += '<td>'+barTotalValue+'</td>';
-        row.innerHTML += '<td>'+percentage(total,barTotalValue,{nachkomma:2})+' %</td>';
-        row.innerHTML += "<td>100 %</td>";
-        table.appendChild(row);
-        
-        
-        
-        var isBold = false;
-        for(var j=dataObj.n-1; j>=0; j--){ //dataObj.n = amountOfActivLayer
-          var layer = layerManager.getActiveLayer(j);
-          row = document.createElement("tr");
-          row.innerHTML = '<td class="zeroleft">'+layer.getLabel()+"</td>";
-          
-          var absValue = layer.getValues({getOriginal:true})[di];
-          
-          isBold = (dataObj.representation=="absolute")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+absValue+"</td>";
-          
-          isBold = (dataObj.representation=="perTotal")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+percentage(total, absValue, {nachkomma:2})+' %</td>';
-          
-          isBold = (dataObj.representation=="perBar")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+percentage(barTotalValue, absValue, {nachkomma:2})+' %</td>';
-          
-          
-          
-          
-          
-          table.appendChild(row);
-        }
-        
-        
-        lastSelectedRect = rect;
-        
-      }else{
-        infobox.style.display = "none";
-      }
-      return;
-}

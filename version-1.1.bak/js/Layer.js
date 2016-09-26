@@ -30,8 +30,6 @@ var Layer = function(options){
     if(dataArray.length===0)return null;
     return dataArray[dataArray.length-1];
   };
-  
-  /*returns array of selected data as objects of the value and the actual index in the dataSet*/
   this.getValues = function(options){
     options = options || {};
     var representation = options.representation || dataObj.representation;
@@ -42,13 +40,13 @@ var Layer = function(options){
     for (k in dataObj.dataSet){
       if(dataObj.labels[k].checkbox.checked){
         if (representation == "perTotal"){
-          a[ak] = {value:percentage(dataObj.dataSet[k].total, dataArray[k]),index:k};
+          a[ak] = percentage(dataObj.dataSet[k].total, dataArray[k]);
         } else if (representation == "perBar") {
-          a[ak] = {value:percentage(barTotal[ak], dataArray[k]),index:k};  
+          a[ak] = percentage(barTotal[ak], dataArray[k]);  
           //barTotal is calculatet in layermanager and is already reduced to the checked lenght
           //because it gets the its data from here with param rep:absolute
         }else{
-          a[ak]={value:dataArray[k],index:k};
+          a[ak]=dataArray[k];
         }
         ak++;
       }

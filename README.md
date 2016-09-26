@@ -6,14 +6,15 @@ Eine Sonderstudie für die UniBe
 
 
 
-Notitz zum github updaten
+Log: 
+Layer.js getValues retruns now an object with the value and the effective index of the whole dataset.
+therfore the layer construction in script.js had to be adapted in such way that the elements of the object ate read.
 
-Working with repositories
+layerNumber to which the rect belongs is now added to rect.
 
-You can push changes to Github using standard git commands inside your SSH terminal:
 
-git add -A // To track all files
+ToDo add some more properties to this array.
 
-git commit -am "message" // To commit changes
 
-git push origin master // Push your local changes to github
+
+Datenzunahme kann bedeuten, dass entweder tatsächlich mehr Aufträge durchgeführt wurde oder, schlicht und einfach mehr Aufträge digital erfasst wurden.

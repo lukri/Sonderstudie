@@ -93,14 +93,8 @@ var SelectionTree = function(options){
     
     tco0 = tree.childrenOrder[0];
     tcco = tree.children[tco0].childrenOrder;
-    //tcLastChild = tree.children[tco0].children[tcco[tcco.length-1]];
-    //this.toggle(tcLastChild.checkbox, true, true);
-    
-    //select three latest years
-    this.toggle(tree.children[tco0].children[tcco[tcco.length-1]].checkbox, true, true);
-    this.toggle(tree.children[tco0].children[tcco[tcco.length-2]].checkbox, true, true);
-    this.toggle(tree.children[tco0].children[tcco[tcco.length-3]].checkbox, true, true);
-    
+    tcLastChild = tree.children[tco0].children[tcco[tcco.length-1]];
+    this.toggle(tcLastChild.checkbox, true, true);
     this.openCloseFcn(tree.children.Gesamt.openCloseButton);
     
   };

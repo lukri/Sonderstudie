@@ -44,14 +44,12 @@ var LayerManager = function (){
     dataObj.drawGraph();
   };
 
-  this.getBarTotal = function(options){
-    options = options || {};
-    var getAllBars = options.getAllBars;
+  this.getBarTotal = function(){
     var total = [];
     for (var i = 0; i < this.getAmountOfActiveLayer(); i++) {
       var a = this.getActiveLayer(i).getValues({representation: "absolute"});
-      for (var k=0; k<a.length;k++) {
-        total[k] = parseFloat(total[k] || 0) + parseFloat(a[k].value);
+      for (var k in a) {
+        total[k] = parseFloat(total[k] || 0) + parseFloat(a[k]);
       }
     }
     return total;
