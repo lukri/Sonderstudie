@@ -235,6 +235,24 @@ dataObj.drawGraph = function() {
     .attr("dy", ".35em")
     .attr("transform", "rotate(-90)")
     .style("text-anchor", "end");
+  
+  // Add the text label for the x axis
+  var xAxisBeschriftung = "Datum";
+  dataObj.svg.append("text")
+    .attr("transform", "translate(" + (dataObj.width / 2) + " ," + (dataObj.height + dataObj.margin.bottom) + ")")
+    .style("text-anchor", "middle")
+    .text(xAxisBeschriftung);  
+  
+    
+  // Add the text label for the Y axis
+  var yAxisBeschriftung = "Ahnzahl";
+  dataObj.svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - dataObj.margin.left)
+    .attr("x",0 - (dataObj.height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text(yAxisBeschriftung);  
 
 
 
