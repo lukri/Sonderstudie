@@ -19,29 +19,25 @@
   <body>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <div class="well"><h3>Simap Analyse</h3></div>
   <div class="well">
-    <div class="row">
-      <div class="col-xs-12">
+    <h3>Simap Analyse</h3>
+  </div>
+  <div class="well">
+    <div id="infobox"></div>
         <div id="headnavibox">
           Darstellung der Zahlen:
           <label class="radio-inline"><input value="absolute" type="radio" name="optradio" checked>Absolut</label>
           <label class="radio-inline"><input value="perTotal" type="radio" name="optradio">% auf Totale pro Balken</label>
           <label class="radio-inline"><input value="perBar" type="radio" name="optradio">% auf Selektionm pro Balken</label>
         </div>
-      </div>
-    </div>
     <div class="row">
-      <div class="col-xs-8">
-        <div id="diagramm-container">
+      <div id="diagram-wrapper" class="col-xs-8">
           <h4>Diagramm</h4>
           <form>
             <label><input id="stackbutton" type="radio" name="mode" value="stacked" checked> Stacked</label>
             <label><input type="radio" name="mode" value="grouped"> Grouped</label>
           </form> 
           <div id="chartbox"></div>
-          <div id="infobox"></div>
-        </div>
       </div>
       <div class="col-xs-4">
         <h4>Legende</h4>

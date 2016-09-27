@@ -12,7 +12,6 @@ dataObj.height = 300 - dataObj.margin.top - dataObj.margin.bottom;
 var selectionTree = new SelectionTree();
 
 
-getDate(dataObj.dataSet);
 var data = null;
 
 var barTotal = [];
@@ -357,7 +356,6 @@ function disableSelection(target){
 
 
 var infobox = document.getElementById('infobox');
-infobox.style.display = "none";
 
 var tableTemplate = document.createElement("table");
 var firstRow = document.createElement("tr");
@@ -392,7 +390,7 @@ function showInfomation(rect){
         var row = document.createElement("tr");
         row.innerHTML = '<td class="zeroleft">Total</td>';
         row.innerHTML += '<td>'+total+'</td>';
-        row.innerHTML += "<td>100 %</td>";
+        row.innerHTML += "<td>100%</td>";
         row.innerHTML += "<td>---</td>";
         table.appendChild(row);
         row = document.createElement("tr");
@@ -400,8 +398,8 @@ function showInfomation(rect){
         var barTotalValue = barTotal[rect.chartIndex];
         row.innerHTML = '<td class="zeroleft">Selektoin</td>';
         row.innerHTML += '<td>'+barTotalValue+'</td>';
-        row.innerHTML += '<td>'+percentage(total,barTotalValue,{nachkomma:2})+' %</td>';
-        row.innerHTML += "<td>100 %</td>";
+        row.innerHTML += '<td>'+percentage(total,barTotalValue,{nachkomma:2})+'%</td>';
+        row.innerHTML += "<td>100%</td>";
         table.appendChild(row);
         
         
@@ -418,10 +416,10 @@ function showInfomation(rect){
           row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+absValue+"</td>";
           
           isBold = (dataObj.representation=="perTotal")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+percentage(total, absValue, {nachkomma:2})+' %</td>';
+          row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+percentage(total, absValue, {nachkomma:2})+'%</td>';
           
           isBold = (dataObj.representation=="perBar")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+percentage(barTotalValue, absValue, {nachkomma:2})+' %</td>';
+          row.innerHTML += '<td class="'+(isBold?"bold":" ")+'">'+percentage(barTotalValue, absValue, {nachkomma:2})+'%</td>';
           
           
           
@@ -438,3 +436,9 @@ function showInfomation(rect){
       }
       return;
 }
+
+
+
+//load Data
+//dataObj.init();
+getDate(dataObj.dataSet);
