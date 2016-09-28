@@ -1,0 +1,12 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+
+.openclose {
+  margin-left: 7px;
+  border: none;
+}

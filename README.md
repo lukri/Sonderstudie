@@ -19,5 +19,9 @@ layerNumber to which the rect belongs is now added to rect.
 ToDo add some more properties to this array.
 
 
+why form around switcher, for right position?
+
+Achsenbeschriftung ? 
+
 
 Datenzunahme kann bedeuten, dass entweder tatsächlich mehr Aufträge durchgeführt wurde oder, schlicht und einfach mehr Aufträge digital erfasst wurden.

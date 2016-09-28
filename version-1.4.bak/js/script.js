@@ -259,23 +259,18 @@ dataObj.drawGraph = function() {
   dataObj.rect.on("mouseover", function(){showInfomation(this);});
   dataObj.rect.on("mouseout", function(){showInfomation();});
 
-  //document.getElementById("stackbutton").checked = true;
-  document.getElementById("switchStackedGrouped").checked = false;
+  document.getElementById("stackbutton").checked = true;
+
 };
 
 
 function change() {
-  if(this.name == "switchStackedGrouped"){
-    //0=left; 1=right
-    if(this.checked){
-      transitionGrouped();
-    }else{
-      transitionStacked();  
-    }
-    return;
-  }
-  
-  if (this.value == "absolute") {
+
+  if (this.value == "grouped") {
+    transitionGrouped();
+  } else if (this.value == "stacked") {
+    transitionStacked();
+  } else if (this.value == "absolute") {
     dataObj.representation = "absolute";
     dataObj.representationUnit = "";
     dataObj.drawGraph();

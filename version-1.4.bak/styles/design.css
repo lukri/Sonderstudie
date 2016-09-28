@@ -65,12 +65,10 @@ and http://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_switch
   height: 15px;
   width: 15px;
   left: 0px;
-  bottom: -4px;
-  background-color: #eee;
-  border:1px solid #ccc;
+  bottom: -5px;
+  background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
-   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 input:checked + .slider {

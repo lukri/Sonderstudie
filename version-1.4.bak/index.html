@@ -33,14 +33,14 @@
     <div class="row">
       <div id="diagram-wrapper" class="col-xs-8">
           <h4>Diagramm</h4>
-          <form>
-          Stacked
           <label class="switch">
-              <input type="checkbox" name="switchStackedGrouped" id="switchStackedGrouped">
+              <input type="checkbox">
               <div class="slider round"></div>
           </label>
-          Grouped
-          </form>
+          <form>
+            <label><input id="stackbutton" type="radio" name="mode" value="stacked" checked> Stacked</label>
+            <label><input type="radio" name="mode" value="grouped"> Grouped</label>
+          </form> 
           <div id="chartbox"></div>
       </div>
       <div class="col-xs-4">
