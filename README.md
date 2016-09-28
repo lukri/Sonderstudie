@@ -19,8 +19,6 @@ layerNumber to which the rect belongs is now added to rect.
 ToDo add some more properties to this array.
 
 
-why form around switcher, for right position?
-
 Achsenbeschriftung ? 
 
 

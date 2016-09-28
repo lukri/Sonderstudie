@@ -193,7 +193,7 @@ dataObj.drawGraph = function() {
       for(dMap;dMap<dataObj.labels.length;dMap++){
         if(dataObj.labels[dMap].checkbox.checked){
           counter++;
-          if(counter%2==1||dataObj.m<50){  //wenn zuviele nur noch jedes zweite anzeigen
+          if(counter%4==1||dataObj.m<50){  //wenn zuviele nur noch quartal
             return dataObj.labels[dMap++].text;
           }else{
             dMap++; //muss trotzdem hochzählen
@@ -385,7 +385,7 @@ function showInfomation(rect){
         infobox.style.display = "block";
         var di = rect.dataIndex;
         var label = dataObj.dataSet[di].label;
-        infobox.innerHTML = "Information f&uuml;r <b>" + label + "</b><ul>";
+        infobox.innerHTML = "Informationen f&uuml;r <b>" + label + "</b><ul>";
         var table = tableTemplate.cloneNode(true);
         infobox.appendChild(table);
         
