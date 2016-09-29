@@ -5,20 +5,10 @@ body {
   width: 960px;
 }
 
-/*is this really used*/
-.openclose {
-  margin-left: 7px;
-  border: none;
-}
-
-
-td {
-  vertical-align: top;
-}
 
 .left-col {
-  width: 66.6666666%;
-  padding-right: 15px;
+  width: 66.6666666%
+  
 }
 .right-col {
   width: 33.3333333%;
@@ -31,8 +21,7 @@ Diagramm Stuff
 #diagram-wrapper {
     position: relative;
     margin-top: -15px;
-    margin-bottom: 30px;
-    margin-left: -15px;
+    margin-bottom: 20px;
     float:left;
     height: 355px;
     width: 610px;
@@ -168,7 +157,6 @@ http://viralpatel.net/blogs/css-radio-button-checkbox-background/
   clear: both;
   float: left;
   margin-right:10px;
-  margin-top:5px;
 }
 
 #representationBox label{
@@ -216,12 +204,4 @@ http://viralpatel.net/blogs/css-radio-button-checkbox-background/
 	-moz-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
 	box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
 	background-color:#e0e0e0;
-}
-
-/*------------------------------------------------------------------------------
-Legend
-------------------------------------------------------------------------------*/
-#legend {
-  margin-top: -10px;
-  height:130px;
 }

@@ -10,6 +10,7 @@
     <!--STYLES-->
     <link rel="stylesheet" href="styles/bootstrap-theme.css">
     <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="styles/general.css">
     <link rel="stylesheet" href="styles/design.css">
     <!--STYLES END-->
   </head>
@@ -22,41 +23,33 @@
   </div>
   <div class="well">
     <div id="infobox"></div>
-    <table>
-      <tr>
-        <td class="left-col">
-          <div id="diagram-wrapper">
-              <h4>Diagramm</h4>
-              <div class="switch-wrapper">
-                &uuml;bereinander
-                <label class="switch">
-                    <input type="checkbox" name="switchStackedGrouped" id="switchStackedGrouped">
-                    <div class="slider round"></div>
-                </label>
-                nebeneinander
-              </div>
-    
-              <div id="chartbox"></div>
+    <div class="row">
+      <div id="diagram-wrapper" class="col-xs-8">
+          <h4>Diagramm</h4>
+          <div class="switch-wrapper">
+            &uuml;bereinander
+            <label class="switch">
+                <input type="checkbox" name="switchStackedGrouped" id="switchStackedGrouped">
+                <div class="slider round"></div>
+            </label>
+            nebeneinander
           </div>
-          <div id="representationBox">
-            <h4>Zahlen Representation</h4>
-            <input id="r1" value="absolute" type="radio" name="optradio" checked><label for="r1" class="bt">Absolut</label>
-            <input id="r2" value="perTotal" type="radio" name="optradio"><label for="r2">% bzgl. Total</label>
-            <input id="r3" value="perBar" type="radio" name="optradio"><label for="r3">% bzgl. Selektion</label>
-          </div>
-        </td>
-        <td class="right-col">
-          <div>
-            <div id="legend">
-              <h4>Legende</h4>
-            </div>
-            <div id="selection">
-              <h4>Daten Auswahl</h4>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </table>
+
+          <div id="chartbox"></div>
+      </div>
+      <div class="col-xs-4">
+        <h4>Legende</h4>
+        <div id="legend"></div>
+        <h4>Zeit Auswahl</h4>
+        <div id="selection"></div>
+      </div>
+    </div>
+    <div id="representationBox">
+      <h4>Zahlen Representation</h4>
+      <input id="r1" value="absolute" type="radio" name="optradio" checked><label for="r1" class="bt">Absolut</label>
+      <input id="r2" value="perTotal" type="radio" name="optradio"><label for="r2">% bzgl. Total</label>
+      <input id="r3" value="perBar" type="radio" name="optradio"><label for="r3">% bzgl. Selektion</label>
+    </div>
   </div>
   <div class="well">
     <h3>Informationen &uuml;ber die Daten</h3>
