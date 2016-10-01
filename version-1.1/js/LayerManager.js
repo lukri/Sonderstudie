@@ -22,18 +22,26 @@ var LayerManager = function (){
   this.drawLegend = function(){
     var legend = document.getElementById("legend");
     for(var i=layerArray.length-1;i>=0;i--){
+      var layer = layerArray[i];
+      var cbId = "cbl"+i;
       var container = document.createElement("div");
-      var colorBox = document.createElement("span");
-      colorBox.appendChild(layerArray[i].getCheckbox());
-      colorBox.style.background = layerArray[i].getColor();
-      colorBox.style.margin = "5px";
-      colorBox.style.padding = "5px";
+      
+      var cb = layerArray[i].getCheckbox();
+      cb.id = cbId;
+      container.appendChild(cb);
+      var label = document.createElement("label");
+      label.setAttribute("for",cbId);
+      //label.style.border = "1px dotted "+layer.getColor();
+      label.style.background = layer.getColor();
+      container.appendChild(label);
       var labelBox = document.createElement("span");
-      labelBox.innerHTML = layerArray[i].getLabel();
-      container.appendChild(colorBox);
+      labelBox.innerHTML = ": "+layerArray[i].getLabel();
       container.appendChild(labelBox);
+      
       legend.appendChild(container);
     }
+    
+    
   };
   this.reorderLayer = function(){
     var checkboxes = document.getElementById("legend").getElementsByTagName("input");

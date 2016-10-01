@@ -5,6 +5,10 @@ body {
   width: 960px;
 }
 
+body * {
+  cursor: default;
+}
+
 /*is this really used*/
 .openclose {
   margin-left: 7px;
@@ -40,6 +44,10 @@ Diagramm Stuff
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);  
 }
 
+rect {
+  cursor: help;
+}
+
 text {
   font: 10px sans-serif;
 }
@@ -52,7 +60,14 @@ text {
 }
 
 
-
+/*------------------------------------------------------------------------------
+Loadingbox
+------------------------------------------------------------------------------*/
+#loadingbox {
+  width:100%;
+  text-align: center;
+  padding-top: 110px;
+}
 
 /*------------------------------------------------------------------------------
 Hovering infobox
@@ -75,15 +90,18 @@ Hovering infobox
     padding:3px;
     border-top:1px solid #BDB76B;
     border-left:1px solid #BDB76B;
-    color:grey;
+    color:#bbb;
 }
 
 #infobox .zerotop {
     border-top:0;
+    width:20%;
 }
 #infobox .zeroleft {
     border-left:0;
+    width:40%;
 }
+
 
 
 
@@ -225,3 +243,38 @@ Legend
   margin-top: -10px;
   height:130px;
 }
+
+#legend input{
+  display: none;
+}
+
+#legend label{
+  width: 20px;
+  height: 20px;
+  padding:0;
+  margin:0;
+  position: absolute;
+}
+
+#legend input {
+  position: absolute;
+}
+
+
+#legend span {
+  color:#ccc;
+}
+
+#legend input:not(:checked) + label{
+   background:none !important;
+   border: 1px dashed #ccc;
+}
+
+#legend input:checked + label + span {
+   color: black;
+}
+
+#legend span {
+  margin-left:25px;
+}
+

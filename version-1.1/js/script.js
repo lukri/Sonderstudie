@@ -1,8 +1,9 @@
 /*global d3, SelectionTree, Layer, LayerManager, getDate*/
 
-var dataObj = {readyState:false};
-dataObj.dataSet = []; //destinationArray
-
+var dataObj = {
+    readyState:false,
+    dataSet:[], //destinationArray
+};
 dataObj.margin = {top: 40, right: 10, bottom: 50, left: 50};
 dataObj.width = 600 - dataObj.margin.left - dataObj.margin.right;
 dataObj.height = 300 - dataObj.margin.top - dataObj.margin.bottom;
@@ -291,6 +292,7 @@ function change() {
     dataObj.representationUnit = "%";
     dataObj.drawGraph();
   } else {
+    return;
   }
 }
 
@@ -367,13 +369,6 @@ var infobox = document.getElementById('infobox');
 
 var tableTemplate = document.createElement("table");
 var firstRow = document.createElement("tr");
-firstRow.innerHTML = '<td class="zerotop zeroleft"></td>\
-<td class="zerotop">Absolut</td>\
-<td class="zerotop">% bzgl. Total</td>\
-<td class="zerotop">% bzgl. Selektion</td>';
-tableTemplate.appendChild(firstRow);
-
-
 
 var lastSelectedRect = null;
 function showInfomation(rect){
@@ -392,42 +387,44 @@ function showInfomation(rect){
         var table = tableTemplate.cloneNode(true);
         infobox.appendChild(table);
         
+        var rep = dataObj.representation;
+        
+        var highlightText = ' style="color:black;"';
+        firstRow.innerHTML = '<td class="zerotop zeroleft"></td>\
+        <td class="zerotop"'+((rep=="absolute")?highlightText:"")+'>Absolut</td>\
+        <td class="zerotop"'+((rep=="perTotal")?highlightText:"")+'>% bzgl. Total</td>\
+        <td class="zerotop"'+((rep=="perBar")?highlightText:"")+'>% bzgl. Selektion</td>';
+        table.appendChild(firstRow);
+        
         var total = dataObj.dataSet[di].total; 
-        
-        
         var row = document.createElement("tr");
-        row.innerHTML = '<td class="zeroleft">Total</td>';
-        row.innerHTML += '<td>'+total+'</td>';
+        row.innerHTML = '<td class="zeroleft"'+((rep=="absolute")?highlightText:"")+'>Total</td>';
+        row.innerHTML += '<td'+((rep=="absolute")||(rep=="perTotal")?highlightText:"")+'>'+total+'</td>';
         row.innerHTML += "<td>100%</td>";
         row.innerHTML += "<td>---</td>";
         table.appendChild(row);
         row = document.createElement("tr");
         
         var barTotalValue = barTotal[rect.chartIndex];
-        row.innerHTML = '<td class="zeroleft">Selektoin</td>';
-        row.innerHTML += '<td>'+barTotalValue+'</td>';
-        row.innerHTML += '<td>'+percentage(total,barTotalValue,{nachkomma:2})+'%</td>';
+        row.innerHTML = '<td class="zeroleft"'+((rep=="absolute")||(rep=="perTotal")?highlightText:"")+'>Selektion</td>';
+        row.innerHTML += '<td'+((rep=="absolute")||(rep=="perBar")?highlightText:"")+'>'+barTotalValue+'</td>';
+        row.innerHTML += '<td'+((rep=="perTotal")?highlightText:"")+'>'+percentage(total,barTotalValue,{nachkomma:2})+'%</td>';
         row.innerHTML += "<td>100%</td>";
         table.appendChild(row);
         
         
-        var isHighlighted = false;
-        var highlightText = ' style="font-weight: bold; color:'+highlightColor+'"';
         for(var j=dataObj.n-1; j>=0; j--){ //dataObj.n = amountOfActivLayer
+          var hit = j==rect.layerNumber-1;
           var layer = layerManager.getActiveLayer(j);
           row = document.createElement("tr");
-          row.innerHTML = '<td class="zeroleft">'+layer.getLabel()+"</td>";
+          highlightText=(hit)?' style="color:black"':"";
+          row.innerHTML = '<td class="zeroleft"'+highlightText+'>'+layer.getLabel()+"</td>";
           
           var absValue = layer.getValues({getOriginal:true})[di];
-          
-          isHighlighted = (dataObj.representation=="absolute")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td'+(isHighlighted?highlightText:"")+'>'+absValue+"</td>";
-          
-          isHighlighted = (dataObj.representation=="perTotal")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td'+(isHighlighted?highlightText:"")+'>'+percentage(total, absValue, {nachkomma:2})+'%</td>';
-          
-          isHighlighted = (dataObj.representation=="perBar")&&(j==rect.layerNumber-1);
-          row.innerHTML += '<td'+(isHighlighted?highlightText:"")+'>'+percentage(barTotalValue, absValue, {nachkomma:2})+'%</td>';
+          highlightText = ' style="font-weight: bold; color:'+highlightColor+'"';
+          row.innerHTML += '<td'+((rep=="absolute")&&(hit)?highlightText:"")+'>'+absValue+"</td>";
+          row.innerHTML += '<td'+((rep=="perTotal")&&(hit)?highlightText:"")+'>'+percentage(total, absValue, {nachkomma:2})+'%</td>';
+          row.innerHTML += '<td'+((rep=="perBar")&&(hit)?highlightText:"")+'>'+percentage(barTotalValue, absValue, {nachkomma:2})+'%</td>';
           
           table.appendChild(row);
         }

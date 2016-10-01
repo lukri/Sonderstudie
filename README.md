@@ -19,6 +19,11 @@ layerNumber to which the rect belongs is now added to rect.
 ToDo add some more properties to this array.
 
 
+legende cursor ändern
+
+
+
+
 Achsenbeschriftung ? 
 
 
