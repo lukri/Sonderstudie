@@ -324,6 +324,7 @@ function transitionStacked() {
 
 
 var isDragging = false;
+var dragChangesOccurred = false;
 var dragObjekt = null;
 
 function dragstart(mover) {
@@ -339,6 +340,7 @@ function draghere(element) {
     }else{
       element.parentNode.insertBefore(dragObjekt,element.nextSibling)
     }
+    dragChangesOccurred = true;
   }
 }
 
@@ -348,7 +350,9 @@ document.onmouseup = function dragStop(){
     isDragging = false;
     dragObjekt.className = "";
     dragObjekt = null;
-    layerManager.reorderLayer();
+    if(dragChangesOccurred)
+      layerManager.reorderLayer();
+    dragChangesOccurred = false;
   }
 };
 
