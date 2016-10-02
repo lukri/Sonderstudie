@@ -63,9 +63,8 @@ dataObj.init = function(){
   
   disableSelection(document);
   
-  document.getElementById("legend").style.cursor = "pointer";
   d3.select("#legend").selectAll("input").on("change", dataObj.drawGraph);
-  d3.select("#legend").selectAll("div").on("dblclick", function(){dragstart(this);});
+  d3.select("#legend").selectAll(".mover").on("mousedown", function(){dragstart(this);});
   d3.select("#legend").selectAll("div").on("mouseover", function(){draghere(this);});
   dataObj.representation = "absolute";
   dataObj.representationUnit = "";
@@ -327,10 +326,10 @@ function transitionStacked() {
 var isDragging = false;
 var dragObjekt = null;
 
-function dragstart(element) {
+function dragstart(mover) {
   isDragging = true;
-  dragObjekt = element;
-  element.style.border = "1px dotted black";
+  dragObjekt = mover.parentNode;
+  dragObjekt.className = "dragObjekt";
 }
 
 function draghere(element) {
@@ -347,7 +346,7 @@ function draghere(element) {
 document.onmouseup = function dragStop(){
   if(isDragging) {
     isDragging = false;
-    dragObjekt.style.border = "none";
+    dragObjekt.className = "";
     dragObjekt = null;
     layerManager.reorderLayer();
   }

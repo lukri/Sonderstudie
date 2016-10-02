@@ -31,12 +31,17 @@ var LayerManager = function (){
       container.appendChild(cb);
       var label = document.createElement("label");
       label.setAttribute("for",cbId);
-      //label.style.border = "1px dotted "+layer.getColor();
       label.style.background = layer.getColor();
       container.appendChild(label);
+     
       var labelBox = document.createElement("span");
-      labelBox.innerHTML = ": "+layerArray[i].getLabel();
+      labelBox.innerHTML = '<label for="'+cbId+'">'+": "+layerArray[i].getLabel()+'</label>';
       container.appendChild(labelBox);
+      
+      var mover = document.createElement("span");
+      mover.innerHTML = "&equiv;";
+      mover.setAttribute("class","mover");
+      container.appendChild(mover);
       
       legend.appendChild(container);
     }

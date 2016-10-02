@@ -206,7 +206,6 @@ http://viralpatel.net/blogs/css-radio-button-checkbox-background/
 	line-height: 20px;
 	color: #333;
 	text-align: center;
-	text-shadow: 0 1px 1px rgba(255,255,255,0.75);
 	vertical-align: middle;
 	cursor: pointer;
 	background-color: #f5f5f5;
@@ -242,21 +241,22 @@ Legend
 #legend {
   margin-top: -10px;
   height:130px;
+  width: 230px;
 }
 
 #legend input{
   display: none;
 }
 
-#legend label{
+#legend div * {
+  cursor: pointer;
+}
+
+#legend div > label{
   width: 20px;
   height: 20px;
   padding:0;
   margin:0;
-  position: absolute;
-}
-
-#legend input {
   position: absolute;
 }
 
@@ -277,4 +277,24 @@ Legend
 #legend span {
   margin-left:25px;
 }
+
+#legend span label{
+  font-weight: normal;
+  position: absolute;
+}
+
+.mover {
+  float:right;
+  right:0;
+  color: #aaa !important;
+  margin-right: 5px;
+  cursor: s-resize !important;
+}
+
+.dragObjekt {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+  border:1px solid #ccc;
+}
+
+
 
