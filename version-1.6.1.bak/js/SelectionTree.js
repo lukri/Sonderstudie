@@ -83,10 +83,10 @@ var SelectionTree = function(options){
     
     var repStyle = options.repStyle || "table"; //table,list
     if(repStyle=="table"){
-      var dataContainer = document.createElement("div"); 
-      dataContainer.id = "data-container";
-      drawTable(dataContainer, tree);
-      HTMLParent.appendChild(dataContainer);
+      var tabelContainer = document.createElement("div"); 
+      tabelContainer.id = "tabelContainer";
+      drawTable(tabelContainer, tree);
+      HTMLParent.appendChild(tabelContainer);
     }
     
     HTMLParent.appendChild(this.selectionUpdater.button);
@@ -201,7 +201,6 @@ var SelectionTree = function(options){
     
     /*header*/
     var dataHead = document.createElement("div");
-    dataHead.id = "data-head";
     var row = document.createElement("div");
     row.id = "first-row";
     var firstRowLabels = ["Jahr","Jan","Feb","Mrz","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"];
@@ -215,10 +214,10 @@ var SelectionTree = function(options){
     dataHead.appendChild(row);
     
     /*body*/
-    var dataBody = document.createElement("div");
-    dataBody.id = "data-body";
-    HTMLParent.appendChild(dataBody);
-
+    var tableBody = document.createElement("tbody");
+    HTMLParent.appendChild(tableBody);
+    var row;
+    
     treeParent = treeParent.children[treeParent.childrenOrder[0]];
     var tPcO = treeParent.childrenOrder;
     console.log(tPcO);
@@ -226,32 +225,40 @@ var SelectionTree = function(options){
       var cbId = "cb"+i;
       var treeChildName = tPcO[tPcO.length-1-i]; //reverse order
       var parent = treeParent.children[treeChildName];
-      row = document.createElement("div");
-      row.className = "data-row";
-      dataBody.appendChild(row);
+      row = document.createElement("tr");
+      var cell = td.cloneNode(true);
+      cell.className = "zeroborder";
+      tableBody.appendChild(row);
       
       var yearLabel = labelTemp.cloneNode(true);
       yearLabel.setAttribute("for",cbId);
-      yearLabel.className="yearlabel zeroborder";
+      yearLabel.className="yearlabel";
       
       yearLabel.innerHTML = treeChildName;
+      
+      row.appendChild(cell);
       parent.checkbox.id = cbId;
-      row.appendChild(parent.checkbox);
-      row.appendChild(yearLabel);
+      cell.appendChild(parent.checkbox);
+      cell.appendChild(yearLabel);
       
       var children = parent.children;
       for(var k in children){
         cbId = "cb"+i+k;
+        cell = td.cloneNode(true);
         var child = children[k];
         
         child.checkbox.id = cbId;
-        row.appendChild(child.checkbox);
+        cell.appendChild(child.checkbox);
         
         var label = labelTemp.cloneNode(true);
         label.setAttribute("for",cbId);
         label.className = "boxStyle";
-        row.appendChild(label);
+        cell.appendChild(label);
+        row.appendChild(cell);  
       }
     }
+    row = document.createElement("tr");
+    row.className = "lastRow";
+    tableBody.appendChild(row);
   }
 };
