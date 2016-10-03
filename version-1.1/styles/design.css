@@ -399,12 +399,7 @@ https://css-tricks.com/snippets/css/text-rotation/
   
 }
 
-
 #toggle-all input:checked + label + span{
   display: none !important;
   
 }
-
-
-
-
