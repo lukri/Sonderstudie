@@ -85,8 +85,8 @@ var SelectionTree = function(options){
     if(repStyle=="table"){
       var dataContainer = document.createElement("div"); 
       dataContainer.id = "data-container";
-      drawTable(dataContainer, tree);
       HTMLParent.appendChild(dataContainer);
+      drawTable(dataContainer, tree);
     }
     
     HTMLParent.appendChild(this.selectionUpdater.button);
@@ -221,7 +221,7 @@ var SelectionTree = function(options){
 
     treeParent = treeParent.children[treeParent.childrenOrder[0]];
     var tPcO = treeParent.childrenOrder;
-    console.log(tPcO);
+    
     for(var i in tPcO){
       var cbId = "cb"+i;
       var treeChildName = tPcO[tPcO.length-1-i]; //reverse order
@@ -253,5 +253,24 @@ var SelectionTree = function(options){
         row.appendChild(label);
       }
     }
+    console.log(treeParent);
+    var toggleAll = document.createElement("div");
+    toggleAll.id = "toggle-all";
+    HTMLParent.parentNode.appendChild(toggleAll);
+    treeParent.checkbox.id = "cbAll";
+    toggleAll.appendChild(treeParent.checkbox);
+    
+    var label1 = document.createElement("label");
+    label1.setAttribute("for","cbAll");
+    label1.innerHTML = "Auswahl entfernen";
+    var spanLale2 = document.createElement("span");
+    var label2 = document.createElement("label");
+    label2.innerHTML = "Alles ausw&auml;hlen";
+    label2.setAttribute("for","cbAll");
+    spanLale2.appendChild(label2); 
+    
+    toggleAll.appendChild(label1);
+    toggleAll.appendChild(spanLale2);
+    
   }
 };
