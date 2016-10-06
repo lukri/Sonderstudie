@@ -375,6 +375,8 @@ var firstRow = document.createElement("tr");
 
 var lastSelectedRect = null;
 function showInfomation(rect){
+      if(isDragging)return; //it shall not cover the legend during dragging 
+      
       if(lastSelectedRect){
         lastSelectedRect.style.fill = "";
       }
