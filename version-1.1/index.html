@@ -27,8 +27,16 @@
         <td class="left-col">
           <div id="diagram-wrapper">
               <h4>Diagramm</h4>
-              <div class="switch-wrapper">
-                &uuml;bereinander
+              <div id="switcher-style" class="switch-wrapper">
+                Linien
+                <label class="switch">
+                    <input type="checkbox" name="switchStyle" id="switchStyle">
+                    <div class="slider round"></div>
+                </label>
+                Balken
+              </div>
+              <div id="switch-stack-group" class="switch-wrapper">
+                gestapelt
                 <label class="switch">
                     <input type="checkbox" name="switchStackedGrouped" id="switchStackedGrouped">
                     <div class="slider round"></div>
@@ -93,6 +101,7 @@
     <script src="js/LayerManager.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/d3.min.js"></script>
+    <!--<script src="//d3js.org/d3.v3.min.js"></script>-->
     <script src="js/SelectionTree.js"></script>
     <script src="js/datamanager.js"></script>
     <script src="js/script.js"></script>

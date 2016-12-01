@@ -114,15 +114,8 @@ and http://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_switch
 
 .switch-wrapper {
   position: absolute;
-  top: 15px;
-}
-
-#switcher-style {
-  right: 300px;
-}
-
-#switch-stack-group {
   right: 10px;
+  top: 15px;
 }
 
 .switch {

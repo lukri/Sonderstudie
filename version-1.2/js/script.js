@@ -160,64 +160,33 @@ dataObj.drawGraph = function() {
     .style("fill", function (d, i) {
       return layerManager.getActiveLayer(i).getColor();
     });
-   
-  var graphStyle = "line"; 
-  if(document.getElementById("switchStyle").checked)graphStyle = "bar"; 
   
-  if(graphStyle=="bar"){
-    dataObj.rect = dataObj.layer.selectAll("rect")
-      .data(function (d) {
-        return d;
-      })
-      .enter().append("rect")
-      .attr("x", function (d) {
-        this.chartIndex = d.x;
-        this.dataIndex = d.index; //adds index directly to the rect
-        this.layerNumber = d.layerNumber;
-        return dataObj.x(d.x);
-      })
-      .attr("y", dataObj.height)
-      .attr("width", dataObj.x.rangeBand())
-      .attr("height", 0);
-  
-    dataObj.rect.transition()
-      .delay(function (d, i) {
-        return i * 10;
-      })
-      .attr("y", function (d) {
-        return dataObj.y(d.y0 + d.y);
-      })
-      .attr("height", function (d) {
-        d.height = dataObj.y(d.y0) - dataObj.y(d.y0 + d.y);
-        return d.height;
-      });
-  }
-    
-  //linien darstellung  
-  var area = d3.svg.area()
-    .x(function(d) { return dataObj.x(d.x)+dataObj.x.rangeBand()/2;})
-    .y0(function(d) { return dataObj.y(d.y0);})
-    .y1(function(d) { return dataObj.y(d.y0 + d.y);});
+  dataObj.rect = dataObj.layer.selectAll("rect")
+    .data(function (d) {
+      return d;
+    })
+    .enter().append("rect")
+    .attr("x", function (d) {
+      this.chartIndex = d.x;
+      this.dataIndex = d.index; //adds index directly to the rect
+      this.layerNumber = d.layerNumber;
+      return dataObj.x(d.x);
+    })
+    .attr("y", dataObj.height)
+    .attr("width", dataObj.x.rangeBand())
+    .attr("height", 0);
 
- 
-
-  if(graphStyle=="line"){
-    dataObj.rect = dataObj.layer.selectAll("rect")
-      .data(function (d,i) {
-        var layerColor = layerManager.getActiveLayer(i).getColor();
-        dataObj.layer.append("path")
-          .datum(d)
-          .attr("class", "area")
-          .attr("d", area)
-          .style('fill', layerColor);
-        return d;
+  dataObj.rect.transition()
+    .delay(function (d, i) {
+      return i * 10;
+    })
+    .attr("y", function (d) {
+      return dataObj.y(d.y0 + d.y);
+    })
+    .attr("height", function (d) {
+      d.height = dataObj.y(d.y0) - dataObj.y(d.y0 + d.y);
+      return d.height;
     });
-  }
-  
-  
-  
-    
-    
 
   var dMap = 0; //d runs from 0 to x. so dMap is to count forward to next checked one
   var counter = 0;
@@ -299,12 +268,6 @@ dataObj.drawGraph = function() {
 
 
 function change() {
-  if(this.name == "switchStyle"){
-    dataObj.drawGraph();
-    return;
-  }
-  
-  
   if(this.name == "switchStackedGrouped"){
     //0=left; 1=right
     if(this.checked){
