@@ -1,90 +1,93 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<!DOCTYPE HTML>
+<html>
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=10" />
+		<title>Log Chart</title>        
+        
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"></script> 	
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js"></script>
+        
+	    <style>
+		    body { font: 12px Arial;}
 
-body {
-  font: 10px sans-serif;
-}
+		    path { 
+		        stroke: steelblue;
+		        stroke-width: 2;
+		        fill: none;
+		    }            
+            
+		    .axis path,
+		    .axis line {
+		        fill: none;
+		        stroke: grey;
+		        stroke-width: 1;
+		        shape-rendering: crispEdges;
+		    }
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+		    .brush .extent {
+		        stroke: #fff;
+		        fill-opacity: .125;
+		        shape-rendering: crispEdges;
+		    }		    
+			.loader {
+	            position: absolute;
+	            top: 0;
+	            bottom: 0;
+	            left: 0;
+	            right: 0;
+	            background: rgba(255,255,255,0.8);
+	            text-align: center;
+	            z-index: 99;
+	            display: none;
+	        }
+            .loader p {
+                margin-top: 180px;
+            }
+		</style>
 
-.area {
-  fill: steelblue;
-}
+		<script type="text/javascript">
+			'use strict';
+		
+		    $(function () {
 
-</style>
-<body>
-<script src="//d3js.org/d3.v3.min.js"></script>
-<script>
+		        requirejs.config({
+		            "baseUrl": "./",
+		            "paths": {
+		                "app": "./",
+		                'moment': 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min',
+		                'underscore': 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min'		                
+		            }
+		        });
 
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
 
-var parseDate = d3.time.format("%d-%b-%y").parse;
+		        require(['d3.chart'], function (d3Chart) {
+		            d3Chart.init({ container: '#container', xDim: 'DateTime' });
+		          // d3Chart.addGraph({ id: 'Speed', type: 'horizon', name: 'Speed', dataId: 512, yVal: ['Value'], data: speedData });
+		            //d3Chart.addGraph({ id: 'Imps', type: 'analog', name: 'RPM', dataId: 513, yVal: ['Value'], data: imps1 });
+		            //d3Chart.addGraph({ id: 'Clicks', type: 'analog', name: 'RPM2', dataId: 513, yVal: ['Value'], data: imps2 });
+				d3Chart.addGraph({ id: 'CTR', type: 'analog', name: 'CTR', dataId: 513, yVal: ['Value'], data: CTR });
+		         //   d3Chart.addGraph({ id: 'DI', type: 'digital', name: 'Digital Input', dataId: 522, data: diData });
+		            
+		     //       d3Chart.addGraph({ id: 'Accel', type: 'analog', name: 'Accel', dataId: 522, yVal: ['X', 'Y', 'Z'], data: accelData });
+					d3Chart.render();		            		           
 
-var x = d3.time.scale()
-    .range([0, width]);
 
-var y = d3.scale.linear()
-    .range([height, 0]);
 
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
 
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
+		        });
 
-var area = d3.svg.area()
-    .x(function(d) { return x(d.date); })
-    .y0(height)
-    .y1(function(d) { return y(d.close); });
+		    });
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		</script>
+	</head>
+	<body>
+	    <script src="./sample_data.js"></script>
 
-d3.tsv("data.tsv", function(error, data) {
-  if (error) throw error;
-
-  data.forEach(function(d) {
-    d.date = parseDate(d.date);
-    d.close = +d.close;
-  });
-
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain([0, d3.max(data, function(d) { return d.close; })]);
-
-  console.log(data);
-
-  svg.append("path")
-      .datum(data)
-      .attr("class", "area")
-      .attr("d", area);
-
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
-
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Price ($)");
-});
-
-</script>
+	    <div id="container" style="min-width: 300px;width:100%">
+			<div class="loader"><p>Working...</p></div>
+		</div>
+        
+	</body>
+</html>

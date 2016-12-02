@@ -194,8 +194,9 @@ dataObj.drawGraph = function() {
   }
     
   //linien darstellung  
+  var closeData = {};
   var area = d3.svg.area()
-    .x(function(d) { return dataObj.x(d.x)+dataObj.x.rangeBand()/2;})
+    .x(function(d) { var xi = Math.ceil(dataObj.x(d.x)+dataObj.x.rangeBand()/2); closeData[xi]={dataIndex:d.index,chartIndex:d.x};return xi;})
     .y0(function(d) { return dataObj.y(d.y0);})
     .y1(function(d) { return dataObj.y(d.y0 + d.y);});
 
@@ -212,8 +213,56 @@ dataObj.drawGraph = function() {
           .style('fill', layerColor);
         return d;
     });
+    
+    
+    
+    
+    var hoverLine = dataObj.layer.append('svg:line')
+            .attr('class', 'hover-line')
+            .attr('x1', 0).attr('x2', 0)
+            .attr('y1', 2)// prevent touching x-axis line
+            .attr('y2', dataObj.height )
+            .attr('stroke-width', 3)
+            .attr('stroke', highlightColor)
+            .attr('opacity', 1e-6);
+         
+    dataObj.layer// mouse event not working on _chartCanvas
+      .on('mouseover', function () {
+          if(isDragging)return;
+          hoverLine.style('opacity', 1);                
+      })
+      .on('mouseout', function () {
+          hoverLine.style("opacity", 1e-6);
+          showInfomation();
+      })
+      .on('mousemove', function () {
+          if(isDragging)return;
+          var mouseX = d3.mouse(this)[0];
+          var mX = getClosestData(mouseX);
+          hoverLine.attr('x1', mX).attr('x2', mX);
+          hoverLine.dataIndex = closeData[mX].dataIndex;
+          hoverLine.chartIndex = closeData[mX].chartIndex;
+          hoverLine.layerNumber = "all";
+          showInfomation(hoverLine);
+      });
+      
+      
+    
   }
   
+  function getClosestData(xValue){
+      var lastDist = Infinity;
+      var lastI = null;
+      for(var i in closeData){
+        if(Math.abs(parseInt(i)-xValue)<lastDist){
+          lastDist=Math.abs(i-xValue);
+        }else{ // last was better
+          break;
+        }
+        lastI = i;
+      }
+      return lastI;
+  }
   
   
     
@@ -303,7 +352,6 @@ function change() {
     dataObj.drawGraph();
     return;
   }
-  
   
   if(this.name == "switchStackedGrouped"){
     //0=left; 1=right
@@ -420,7 +468,7 @@ function showInfomation(rect){
       
       if(rect){
         //highlight selection
-        rect.style.fill = "blue";
+        rect.style.fill = highlightColor;
         
         infobox.style.display = "block";
         var di = rect.dataIndex;
@@ -456,7 +504,7 @@ function showInfomation(rect){
         
         
         for(var j=dataObj.n-1; j>=0; j--){ //dataObj.n = amountOfActivLayer
-          var hit = j==rect.layerNumber-1;
+          var hit = j==rect.layerNumber-1 || rect.layerNumber == "all";
           var layer = layerManager.getActiveLayer(j);
           row = document.createElement("tr");
           highlightText=(hit)?' style="color:black"':"";
