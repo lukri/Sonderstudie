@@ -48,6 +48,10 @@ rect {
   cursor: help;
 }
 
+path {
+  cursor: help;
+}
+
 text {
   font: 10px sans-serif;
 }

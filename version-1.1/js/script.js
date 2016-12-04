@@ -152,6 +152,10 @@ dataObj.drawGraph = function() {
   dataObj.y = d3.scale.linear()
     .domain([0, yStackMax])
     .range([dataObj.height, 0]);
+  
+  dataObj.yBar = d3.scale.linear()
+    .domain([0, yStackMax])
+    .range([dataObj.height, 0]);
 
   dataObj.layer = dataObj.svg.selectAll(".layer")
     .data(layers)
@@ -195,11 +199,21 @@ dataObj.drawGraph = function() {
     
   //linien darstellung  
   var closeData = {};
-  var area = d3.svg.area()
+  dataObj.area = d3.svg.area()
     .x(function(d) { var xi = Math.ceil(dataObj.x(d.x)+dataObj.x.rangeBand()/2); closeData[xi]={dataIndex:d.index,chartIndex:d.x};return xi;})
     .y0(function(d) { return dataObj.y(d.y0);})
     .y1(function(d) { return dataObj.y(d.y0 + d.y);});
+    
+    
+  dataObj.area0 = d3.svg.area()
+    .x(0)
+    .y0(dataObj.height)
+    .y1(dataObj.height);
 
+  dataObj.line = d3.svg.line()
+    .x(function(d) { var xi = Math.ceil(dataObj.x(d.x)+dataObj.x.rangeBand()/2); closeData[xi]={dataIndex:d.index,chartIndex:d.x};return xi;})
+    .y(function(d) { return dataObj.y(d.y0);});
+ 
  
 
   if(graphStyle=="line"){
@@ -209,22 +223,29 @@ dataObj.drawGraph = function() {
         dataObj.layer.append("path")
           .datum(d)
           .attr("class", "area")
-          .attr("d", area)
-          .style('fill', layerColor);
+          .attr("d", dataObj.area0)
+          .style('fill', layerColor)
+          .attr('opacity', 1e-6);
         return d;
     });
     
-    
-    
+  dataObj.layer.selectAll("path").transition(1000).delay(function (d, i) {
+        //return (i+1) * 100;
+        return 0;
+      })
+      .attr("d", dataObj.area)
+      .attr('opacity', 1);
+         
     
     var hoverLine = dataObj.layer.append('svg:line')
             .attr('class', 'hover-line')
             .attr('x1', 0).attr('x2', 0)
-            .attr('y1', 2)// prevent touching x-axis line
-            .attr('y2', dataObj.height )
+            .attr('y1', 0)
+            .attr('y2', dataObj.height)
             .attr('stroke-width', 3)
             .attr('stroke', highlightColor)
-            .attr('opacity', 1e-6);
+            .attr('opacity', 1e-6)
+            .style('cursor','help');
          
     dataObj.layer// mouse event not working on _chartCanvas
       .on('mouseover', function () {
@@ -383,7 +404,7 @@ function change() {
 
 
 function transitionGrouped() {
-  dataObj.y.domain([0, yGroupMax]);
+  dataObj.yBar.domain([0, yGroupMax]);
 
   dataObj.rect.transition()
     .duration(500)
@@ -391,16 +412,26 @@ function transitionGrouped() {
     .attr("x", function(d, i, j) { return dataObj.x(d.x) + dataObj.x.rangeBand() / dataObj.n * j; })
     .attr("width", dataObj.x.rangeBand() / dataObj.n)
     .transition()
-    .attr("y", function(d) {return dataObj.y(0)-d.height;});
+    .attr("y", function(d) {return dataObj.yBar(0)-d.height;});
 }
 
 function transitionStacked() {
-  dataObj.y.domain([0, yStackMax]);
+  //for lines
+  dataObj.layer.selectAll("path").transition(1000).delay(function (d, i) {
+        //return (i+1) * 100;
+        return 0;
+      })
+      .attr("d", dataObj.area)
+      .attr('opacity', 1);
+  
+  
+  //for bars
+  dataObj.yBar.domain([0, yStackMax]);
 
   dataObj.rect.transition()
     .duration(500)
     .delay(function(d, i) { return i * 10; })
-    .attr("y", function(d) { return dataObj.y(d.y0 + d.y); })
+    .attr("y", function(d) { return dataObj.yBar(d.y0 + d.y); })
     .attr("height", function(d) { return d.height; })
     .transition()
     .attr("x", function(d) { return dataObj.x(d.x); })
