@@ -199,22 +199,27 @@ dataObj.drawGraph = function() {
     
   //linien darstellung  
   var closeData = {};
-  dataObj.area = d3.svg.area()
+  dataObj.areaStack = d3.svg.area()
     .x(function(d) { var xi = Math.ceil(dataObj.x(d.x)+dataObj.x.rangeBand()/2); closeData[xi]={dataIndex:d.index,chartIndex:d.x};return xi;})
     .y0(function(d) { return dataObj.y(d.y0);})
     .y1(function(d) { return dataObj.y(d.y0 + d.y);});
     
     
+  dataObj.areaOverlap = d3.svg.area()
+    .x(function(d) { var xi = Math.ceil(dataObj.x(d.x)+dataObj.x.rangeBand()/2); closeData[xi]={dataIndex:d.index,chartIndex:d.x};return xi;})
+    .y0(function(d) { return dataObj.y(d.y);})
+    .y1(function(d) { return dataObj.y(d.y);});
+    
+  dataObj.areaOverlapHidden = d3.svg.area() //for selection reason
+    .x(function(d) { var xi = Math.ceil(dataObj.x(d.x)+dataObj.x.rangeBand()/2); closeData[xi]={dataIndex:d.index,chartIndex:d.x};return xi;})
+    .y0(function(d) { return dataObj.y(d.y);})
+    .y1(dataObj.height); // goes down to the axis -> area below gets selectable
+  
   dataObj.area0 = d3.svg.area()
     .x(0)
     .y0(dataObj.height)
     .y1(dataObj.height);
 
-  dataObj.line = d3.svg.line()
-    .x(function(d) { var xi = Math.ceil(dataObj.x(d.x)+dataObj.x.rangeBand()/2); closeData[xi]={dataIndex:d.index,chartIndex:d.x};return xi;})
-    .y(function(d) { return dataObj.y(d.y0);});
- 
- 
 
   if(graphStyle=="line"){
     dataObj.rect = dataObj.layer.selectAll("rect")
@@ -225,17 +230,26 @@ dataObj.drawGraph = function() {
           .attr("class", "area")
           .attr("d", dataObj.area0)
           .style('fill', layerColor)
+          .style('stroke',layerColor)
+          .style('stroke-with',2)
           .attr('opacity', 1e-6);
+        
+        dataObj.layer.append("path") //makes selection possible in ovelap mode
+          .datum(d)
+          .attr("class", "area-hidden")
+          .attr("d", dataObj.areaOverlapHidden)
+          .attr('opacity', 1e-6);
+          
         return d;
     });
     
-  dataObj.layer.selectAll("path").transition(1000).delay(function (d, i) {
+    dataObj.layer.selectAll(".area").transition(1000).delay(function (d, i) {
         //return (i+1) * 100;
         return 0;
       })
-      .attr("d", dataObj.area)
+      .attr("d", dataObj.areaStack)
       .attr('opacity', 1);
-         
+    
     
     var hoverLine = dataObj.layer.append('svg:line')
             .attr('class', 'hover-line')
@@ -247,7 +261,7 @@ dataObj.drawGraph = function() {
             .attr('opacity', 1e-6)
             .style('cursor','help');
          
-    dataObj.layer// mouse event not working on _chartCanvas
+    dataObj.layer
       .on('mouseover', function () {
           if(isDragging)return;
           hoverLine.style('opacity', 1);                
@@ -404,6 +418,15 @@ function change() {
 
 
 function transitionGrouped() {
+  //for lines
+  dataObj.layer.selectAll(".area").transition(1000).delay(function (d, i) {
+        //return (layerManager.getAmountOfActiveLayer()-i) * 100;
+        return 0;
+      })
+      .attr("d", dataObj.areaOverlap)
+      .attr('fill-opacity', 1e-6);
+  
+  //for bars
   dataObj.yBar.domain([0, yGroupMax]);
 
   dataObj.rect.transition()
@@ -417,12 +440,12 @@ function transitionGrouped() {
 
 function transitionStacked() {
   //for lines
-  dataObj.layer.selectAll("path").transition(1000).delay(function (d, i) {
-        //return (i+1) * 100;
+  dataObj.layer.selectAll(".area").transition(1000).delay(function (d, i) {
+        //return (i) * 100;
         return 0;
       })
-      .attr("d", dataObj.area)
-      .attr('opacity', 1);
+      .attr("d", dataObj.areaStack)
+      .attr('fill-opacity', 1);
   
   
   //for bars
@@ -539,7 +562,8 @@ function showInfomation(rect){
           var layer = layerManager.getActiveLayer(j);
           row = document.createElement("tr");
           highlightText=(hit)?' style="color:black"':"";
-          row.innerHTML = '<td class="zeroleft"'+highlightText+'>'+layer.getLabel()+"</td>";
+          var layerBox = '<div style="margin:3px 5px 0 0; float:left; height:13px;width:13px;background:'+layer.getColor()+'"></div>';
+          row.innerHTML = '<td class="zeroleft"'+highlightText+'>'+layerBox+layer.getLabel()+"</td>";
           
           var absValue = layer.getValues({getOriginal:true})[di];
           highlightText = ' style="font-weight: bold; color:'+highlightColor+'"';
